@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-browser-title">טוען מאמר...</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;800&family=Noto+Sans+Hebrew:wght@300;400;700&family=Noto+Serif+Hebrew:wght@300;400;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 
+                        bookColor: 'var(--primary-color)',
+                        bookLight: 'var(--light-color)'
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans Hebrew', 'Heebo', 'sans-serif'],
+                        serif: ['Noto Serif Hebrew', 'serif'],
+                        titleFont: ['NoaShalev', 'serif'],
+                        subtitleFont: ['OHLiorAtias', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @font-face { font-family: 'OHLiorAtias'; src: url('OHLiorAtias-Regular.ttf') format('truetype'); }
+        @font-face { font-family: 'NoaShalev'; src: url('noa-shalev-regular-AlefAlefAlef.otf') format('opentype'); }
+
+        :root { --primary-color: #64748b; --light-color: #f1f5f9; }
+        body { background-color: #fdfaf7; color: #1e293b; overflow-x: hidden; }
+        
+        .article-content p { 
+            font-family: 'Noto Serif Hebrew', serif;
+            font-size: 1.25rem; line-height: 1.8; margin-bottom: 1.8rem;
+            color: #1e293b; font-weight: 400; text-align: justify; text-justify: inter-word;
+        }
+        @media (min-width: 768px) { .article-content p { font-size: 1.45rem; } }
+        
+        .article-content h3 { 
+            font-family: 'NoaShalev', serif; font-weight: bold; margin-top: 3rem; margin-bottom: 1.2rem;
+            display: block; color: var(--primary-color); font-size: 1.8rem; text-align: right;
+        }
+
+        .article-content .centered { 
+            font-family: 'Noto Serif Hebrew', serif; font-weight: bold; margin-top: 3rem; margin-bottom: 1.2rem;
+            display: block; color: var(--primary-color); font-size: 1.8rem; text-align: center;
+        }
+
+        @media (min-width: 768px) { .article-content h3, .article-content .centered { font-size: 2.2rem; } }
+        
+        .article-content .quote { 
+            margin-top: 3rem; margin-bottom: 3rem; padding: 1.5rem 2rem;
+            font-family: 'Heebo', sans-serif; font-weight: 300; font-style: italic;
+            color: #334155; background-color: var(--light-color);
+            border-right: 5px solid var(--primary-color); border-radius: 0 16px 16px 0;
+            text-align: right; line-height: 1.6; font-size: 1.3rem;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+        }
+
+        .article-content b { @apply font-bold text-black; }
+
+        .back-btn {
+            display: flex; position: absolute; top: 1.5rem; right: 1.5rem; z-index: 40;
+            width: 42px; height: 42px; align-items: center; justify-content: center;
+            color: white; background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px);
+            border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s;
+        }
+
+        .hero-container {
+            position: relative; height: 55vh; width: 100%; overflow: hidden;
+            background: linear-gradient(135deg, var(--primary-color), var(--light-color));
+        }
+        @media (min-width: 768px) { .hero-container { height: 70vh; } }
+
+        #article-hero-img {
+            position: absolute; 
+            top: -100px; /* מזיז את התמונה למעלה אל מחוץ למסך */
+            left: 0;
+            right: 0;
+            height: calc(100% + 100px); /* מפצה על ההזזה כדי שלא יהיה חור למטה */
+            background-size: cover; 
+            background-position: center; 
+            z-index: 10;
+        }
+
+        .hero-fallback-icon {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            opacity: 0.3; color: white; z-index: 5;
+        }
+        .hero-fallback-icon span { font-size: 120px; }
+
+        .floating-container { position: fixed; bottom: 2rem; left: 2rem; display: flex; flex-direction: column; gap: 1rem; z-index: 50; }
+        
+        .action-btn {
+            width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s;
+        }
+        .btn-share { background-color: rgba(100, 116, 139, 0.7); color: white; }
+        .btn-whatsapp { background-color: rgba(37, 211, 102, 0.7); color: white; }
+        .action-btn:active { transform: scale(0.9); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="hero-container">
+        <div id="article-hero-img"></div>
+        <div class="hero-fallback-icon">
+            <span class="material-symbols-outlined">menu_book</span>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#fdfaf7] via-transparent to-black/30 z-20"></div>
+        
+        <a href="javascript:history.back()" class="back-btn">
+            <span class="material-symbols-outlined" style="font-size: 22px;">arrow_forward</span>
+        </a>
+    </div>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-6 -mt-48 relative z-30 pb-40">
+        <div class="bg-white rounded-[3.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-6 md:p-20 border border-slate-50">
+            
+            <div class="text-center mb-8">
+                <h1 id="article-title" class="text-6xl md:text-8xl font-titleFont mb-6 leading-tight"></h1>
+                <p id="article-subtitle" class="text-4xl md:text-6xl font-subtitleFont opacity-95 italic mb-10"></p>
+                
+                <div class="border-y border-slate-100 py-4 mt-8">
+                    <div class="flex items-center justify-between w-full flex-nowrap gap-2">
+                        <div class="flex items-center gap-2 md:gap-3 shrink-0">
+                            <img id="writer-img" src="" alt="" class="w-9 h-9 md:w-12 md:h-12 rounded-full object-cover border border-bookColor/20">
+                            <div class="text-right">
+                                <div id="writer-name" class="font-bold text-[13px] md:text-base text-slate-700 font-sans leading-tight"></div>
+                                <div id="article-date" class="text-[11px] md:text-xs text-slate-400 font-light leading-tight"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-1 md:gap-2 text-slate-500 bg-slate-50 px-2 md:px-4 py-1.5 rounded-full border border-slate-100 shrink-0">
+                            <span class="material-symbols-outlined text-base md:text-lg">schedule</span>
+                            <span id="read-time" class="text-[11px] md:text-sm font-medium font-sans whitespace-nowrap">-- דק' קריאה</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="article-body" class="article-content">
+            </div>
+
+            <div class="mt-28 pt-12 border-t-2 border-dashed border-slate-100 text-center">
+                <p class="font-subtitleFont text-3xl opacity-40">מוגש באהבה מצוות אור בפרשה</p>
+            </div>
+        </div>
+    </main>
+
+    <div class="floating-container">
+        <button onclick="shareArticle()" class="action-btn btn-share">
+            <span class="material-symbols-outlined text-2xl">share</span>
+        </button>
+        <a href="https://chat.whatsapp.com/BjiSiibK4SPIod9sErMhBT" target="_blank" class="action-btn btn-whatsapp">
+            <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </a>
+    </div>
+
+    <script>
+        const booksConfig = {
+            'bereshit': { color: '#10b981', light: '#ecfdf5' },
+            'shmot': { color: '#f97316', light: '#fff7ed' },
+            'vaikra': { color: '#a855f7', light: '#faf5ff' },
+            'bamidbar': { color: '#d97706', light: '#fffbeb' },
+            'devarim': { color: '#0284c7', light: '#f0f9ff' }
+        };
+
+        async function loadArticle() {
+            const params = new URLSearchParams(window.location.search);
+            const articleId = params.get('parasha');
+            const bookId = params.get('book');
+
+            const config = booksConfig[bookId] || { color: '#64748b', light: '#f1f5f9' };
+            document.documentElement.style.setProperty('--primary-color', config.color);
+            document.documentElement.style.setProperty('--light-color', config.light);
+
+            try {
+                const response = await fetch(`parashot/${bookId}/${articleId}.txt`);
+                if (!response.ok) throw new Error();
+                const text = await response.text();
+                renderArticle(text);
+            } catch (err) {
+                document.getElementById('article-body').innerHTML = "<p class='text-center'>שגיאה בטעינת המאמר.</p>";
+            }
+        }
+
+        function calculateReadTime(text) {
+            const wordsPerMinute = 200;
+            const noOfWords = text.trim().split(/\s+/).length;
+            const minutes = Math.max(1, Math.ceil(noOfWords / wordsPerMinute));
+            return minutes;
+        }
+
+        function renderArticle(rawText) {
+            const separator = rawText.indexOf('---');
+            const metaPart = rawText.substring(0, separator);
+            const contentPart = rawText.substring(separator + 3).trim();
+
+            const metadata = {};
+            metaPart.split('\n').forEach(line => {
+                const parts = line.split(':');
+                if (parts.length >= 2) {
+                    metadata[parts[0].trim()] = parts.slice(1).join(':').trim();
+                }
+            });
+
+            const minutes = calculateReadTime(contentPart);
+            document.getElementById('read-time').textContent = `${minutes} דק' קריאה`;
+
+            document.getElementById('page-browser-title').textContent = metadata.title;
+            document.getElementById('article-title').textContent = metadata.title;
+            document.getElementById('article-title').style.color = 'var(--primary-color)';
+            document.getElementById('article-subtitle').textContent = metadata.subtitle;
+            document.getElementById('article-subtitle').style.color = 'var(--primary-color)';
+            
+            const heroImg = document.getElementById('article-hero-img');
+            if (metadata.image && metadata.image.trim() !== "") {
+                heroImg.style.backgroundImage = `url('${metadata.image}')`;
+            }
+
+            document.getElementById('writer-name').textContent = metadata.writer;
+            document.getElementById('writer-img').src = metadata['profile picture'];
+            document.getElementById('article-date').textContent = metadata.date;
+
+            const body = document.getElementById('article-body');
+            const lines = contentPart.split('\n');
+            let html = "";
+            let currentParagraph = [];
+
+            function flushParagraph() {
+                if (currentParagraph.length > 0) {
+                    let pText = currentParagraph.join('<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                    html += `<p>${pText}</p>`;
+                    currentParagraph = [];
+                }
+            }
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('H3:')) {
+                    flushParagraph();
+                    html += `<h3>${trimmed.replace('H3:', '').trim()}</h3>`;
+                } else if (trimmed.startsWith('quote:')) {
+                    flushParagraph();
+                    html += `<div class="quote">${trimmed.replace('quote:', '').trim()}</div>`;
+                } else if (trimmed.startsWith('center-text:')) {
+                    flushParagraph();
+                    html += `<div class="centered">${trimmed.replace('center-text:', '').trim()}</div>`;
+                } else if (trimmed === "") {
+                    flushParagraph();
+                } else {
+                    currentParagraph.push(trimmed);
+                }
+            });
+            flushParagraph();
+            body.innerHTML = html;
+        }
+
+        function shareArticle() {
+            if (navigator.share) {
+                navigator.share({ title: document.getElementById('article-title').textContent, url: window.location.href });
+            }
+        }
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
