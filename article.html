@@ -275,7 +275,7 @@
             const subtitle = document.getElementById('article-subtitle').textContent;
             
             // יצירת הטקסט עם ירידת שורה לפני הקישור
-            const shareText = `*אור בפרשה* | ${title} - ${subtitle}\n`;
+            const shareText = `אור בפרשה\n${title} - ${subtitle}\n`;
             
             if (navigator.share) {
                 navigator.share({
